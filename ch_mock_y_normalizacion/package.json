@@ -2,26 +2,28 @@
   "name": "coder_desafios_bloque2",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "engines": {
     "node": "16.x"
   },
   "scripts": {
-    "start": "node ./src/index.js",
-    "start-dev": "nodemon ./src/index.js",
-    "make-migration": "knex migrate:make",
-    "migrate": "knex migrate:up",
-    "rollback": "knex migrate:rollback",
-    "list-migrations": "knex migrate:list"
+    "start": "node ./src/server.js",
+    "start-dev": "nodemon ./src/server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-handlebars": "^6.0.6",
+    "hbs": "^4.2.0",
+    "mongoose": "^6.7.2",
+    "socket.io": "^4.5.3",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "nodemo": "^1.0.0",
+    "@faker-js/faker": "^7.6.0",
     "nodemon": "^2.0.20"
   }
 }

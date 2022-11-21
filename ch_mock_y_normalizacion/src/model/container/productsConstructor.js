@@ -1,4 +1,4 @@
-const { mariaDB } = require('../db/config')
+const { mariaDB } = require('../db/db.config')
 const knex = require('knex')(mariaDB)
 
 class ProductsConstructor {

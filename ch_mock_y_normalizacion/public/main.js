@@ -18,46 +18,64 @@ const makeHtmlTable = (products) => {
 
 //-------------------------------------------------------------------------------------
 
-const inputUsername = document.getElementById('inputUsername')
-const inputMessage = document.getElementById('inputMessage')
+const username = document.getElementById('username')
+const nameUser = document.getElementById('name')
+const lastname = document.getElementById('lastname')
+const age = document.getElementById('age')
+const aka = document.getElementById('aka')
+const avatar = document.getElementById('avatar')
+
+const text = document.getElementById('inputMessage')
 const btnSend = document.getElementById('btnSend')
 
 const formMessage = document.getElementById('formMessage')
 formMessage.addEventListener('submit', e => {
     e.preventDefault()
 
-    const message = { email: inputUsername.value, text: inputMessage.value }
-    socket.emit('newMessage', message);
+    const authorMessages = { 
+        author: {
+            username: username.value,
+            name: nameUser.value, 
+            lastname: lastname.value,
+            age: age.value,
+            aka: aka.value,
+            avatar: avatar.value
+        },
+        text: text.value
+    }
+    socket.emit('newMessage', authorMessages);
     formMessage.reset()
-    inputMessage.focus()
+    text.focus()
 })
 
 socket.on('message', message => {
-    console.log(message);
+    console.log(`This is message inside socket.on in main.js ${message}`);
     const html = makeHtmlList(message)
     document.getElementById('message').innerHTML = html;
+    console.log(`html => ${html}`);
 })
 
-const makeHtmlList = (message) =>{
+const makeHtmlList = (message) => {
+    console.log(message);
     return message.map(message => {
         return (`
             <div>
-                <b style="color:blue;">${message.email}</b>
-                [<span style="color:brown;">${message.time}</span>] :
+                <b style="color:blue;">${message.author.aka}</b>
+                [<span style="color:brown;">${message.author.timestamp}</span>] :
                 <i style="color:green;">${message.text}</i>
             </div>
         `)
     }).join(" ");
 }
 
-inputUsername.addEventListener('input', () => {
-    const valueEmail = inputUsername.value.length
-    const valueText = inputMessage.value.length
-    inputMessage.disabled = !valueEmail
+username.addEventListener('input', () => {
+    const valueEmail = username.value.length
+    const valueText = text.value.length
+    text.disabled = !valueEmail
     btnSend.disabled = !valueEmail || !valueText
 })
 
-inputMessage.addEventListener('input', () => {
-    const valueText = inputMessage.value.length
+text.addEventListener('input', () => {
+    const valueText = text.value.length
     btnSend.disabled = !valueText
 })

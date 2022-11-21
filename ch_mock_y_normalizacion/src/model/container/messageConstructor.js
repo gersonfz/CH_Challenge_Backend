@@ -1,4 +1,4 @@
-const { sqlite } = require('../db/config')
+const { sqlite } = require('../../db/db.config')
 const knex = require('knex')(sqlite)
 
 
