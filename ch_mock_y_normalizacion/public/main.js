@@ -41,7 +41,9 @@ formMessage.addEventListener('submit', e => {
             aka: aka.value,
             avatar: avatar.value
         },
-        text: text.value
+        text: {
+            message: text.value
+        }
     }
     socket.emit('newMessage', authorMessages);
     formMessage.reset()
@@ -54,15 +56,13 @@ socket.on('message', message => {
 })
 
 const makeHtmlList = (message) => {
-    return message.map(message => {
-        return (`
-            <div>
-                <b style="color:blue;">${message.author.aka}</b>
-                [<span style="color:brown;">${message.author.timestamp}</span>] :
-                <i style="color:green;">${message.text}</i>
-            </div>
-        `)
-    }).join(" ");
+        return message.map(element => {
+                return (`<div>
+                    <b style="color:blue;">${element.author.aka}</b>
+                    [<span style="color:brown;">${element.text.map(element => element.timestamp)}</span>] :
+                    <i style="color:green;">${element.text.map(element => element.message)}</i>
+                    </div>`)
+            }).join(" ");
 }
 
 username.addEventListener('input', () => {

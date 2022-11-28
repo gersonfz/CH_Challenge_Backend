@@ -11,7 +11,7 @@ const createFakeProducts = () => {
         thumbnail: faker.image.image(),
         price: faker.commerce.price(),
         timestamp: faker.date.recent(),
-        id: uuid()
+        ObjectId: uuid()
     }
 }
 

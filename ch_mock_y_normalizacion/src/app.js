@@ -4,7 +4,8 @@ const { Server: HttpServer } = require('http');
 const { Server: SocketServer } = require('socket.io');
 const ProductsConstructor = require('./model/DAOs/products/products.dao')
 const MessageConstructor = require('./model/DAOs/messages/messages.dao')
-const logger = require('./middleware/logger.middleware')
+const logger = require('./middleware/logger.middleware');
+const normalizerMessages = require('./utils/normalizr.utils');
 
 
 const app = express();
@@ -44,15 +45,20 @@ io.on('connection', async (socket) => {
         // Update Message
         socket.on('newMessage', async message => {
             const email = await messageSocket.getAll();
-            const updateEmail = await messageSocket.getByEmail(email)
-            if(updateEmail !== message){
-                await messageSocket.updateText(updateEmail, [message]);
-            } else{
+            if(email.length){
+                const updateEmail = await messageSocket.getByEmail(email)   
+                updateEmail.author.username === message.author.username 
+                ? 
+                await messageSocket.updateText(updateEmail, [message])
+                :
+                await messageSocket.save(message);
+                
+            } else {
                 await messageSocket.save(message)
             }
             io.sockets.emit('message', await messageSocket.getAll());
         })
-});
+    });
 
 
 module.exports = httpServer;

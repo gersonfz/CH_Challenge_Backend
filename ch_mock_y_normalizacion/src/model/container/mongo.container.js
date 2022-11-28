@@ -4,9 +4,13 @@ const { HttpError } = require('../../utils/api.utils')
 const { HTTP_STATUS } = require('../../constants/api.constants')
 
 
+
 class MongoContainer {
     constructor(collection, schema) {
         this.model = mongoose.model(collection, schema)
+
+        //Here mock container tests!
+        this.items
     }
 
     static async connect() {
@@ -33,6 +37,7 @@ class MongoContainer {
     }
 
     async getByEmail(username){
+        console.log(username);
         const email = username.map(item => item.author.email)
         const document = await this.model.findOne({ email }, { __v: 0 })
         if(!document){
@@ -58,18 +63,12 @@ class MongoContainer {
         return updatedDocument
     }
     async updateText(id, item) {
-        const text = item.map(element => element.text).toString();
+        const text = item.map(element => element.text.message).toString();
         console.log('text' + text);
         const messageId = id._id;
         const updatedDocument = await this.model.updateOne(
             { _id: messageId },
-            {$push:
-                {text: {
-                    $each: 
-                        text
-                    }
-                }
-            }
+            {$push: {text: {message: text}}}
         )
             console.log(updatedDocument);
         return updatedDocument;
@@ -83,6 +82,8 @@ class MongoContainer {
         }
         return deletedDocument
     }
+
+
 }
 
 module.exports = MongoContainer;

@@ -1,6 +1,6 @@
 const auth = (req, res, next) => {
     const { url, method } = req
-    const isAdmine = process.env.ADMIN === 'true' || true
+    const isAdmin = true
 
     if (!isAdmin) {
         return res.status(401).json({

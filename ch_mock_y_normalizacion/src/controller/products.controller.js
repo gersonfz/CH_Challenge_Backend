@@ -1,9 +1,15 @@
 const { HTTP_STATUS } = require("../constants/api.constants");
-const { ProductsDao } = require("../model/DAOs/app.daos");
 const { successResponse } = require("../utils/api.utils");
+const { ProductsDao } = require('../model/DAOs/app.daos');
+const path = require('path')
+const MockContainer  = require('../model/container/mock.container');
+const productsFaker = require('../utils/products.utils');
 
 
-const roductsDao = new ProductsDao();
+const mockContainer = new MockContainer(path.resolve(__dirname, '../data/product.mock.json'))
+
+
+const productsDao = new ProductsDao();
 
 class ProductsController {
     async getProducts(req, res, next) {
@@ -65,14 +71,29 @@ class ProductsController {
         }
     }
     async productsTestFaker(req, res, next) {
-        const { qty } = req.query;
         try {
-            const users = usersDao.populate(qty);
-            const response = successResponse(users);
-            res.status(HTTP_STATUS.OK).json(response);
+            const products = [];
+            for(let i = 0; i <= 5; i++){
+                products.push(productsFaker())
+            }
+            console.log(products);
+            const response = successResponse(response)
+            res.json(response);
         }
         catch (error) {
             next(error);
+        }
+    }
+    async getAllProductsTestFaker(req, res, next){
+        const { productsFaker } = req.body;
+        try {
+            console.log(productsFaker);
+            const products = await mockContainer.getAll();
+            console.log('Get Products Faker');
+            const response = successResponse(products);
+            res.status(HTTP_STATUS.OK).json(response);        }
+        catch(error) {
+            next(error)
         }
     }
 }
